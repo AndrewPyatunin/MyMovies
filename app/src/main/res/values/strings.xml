@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">My Movies</string>
+    <string name="textViewTitle">%1$s \"%2$s\"\nГод выпуска: %3$d</string>
+    <string name="tv_series">Сериал:</string>
+    <string name="movie">Фильм:</string>
+    <string name="textViewRating">Рейтинг по версии кинопоиск: %1$.1f</string>
+    <string name="textViewGenres">Жанры: %1$s</string>
+</resources>
