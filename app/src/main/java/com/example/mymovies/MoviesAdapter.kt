@@ -54,13 +54,21 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesViewHolder {
+
         val view = LayoutInflater.from(parent.context).inflate(R.layout.movie_item, parent, false)
         return MoviesViewHolder(view)
     }
 
     override fun onBindViewHolder(moviesViewHolder: MoviesViewHolder, position: Int) {
         val movie = movies[position]
-        Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image).error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
+        if (MainActivity.ISDOWNLOADED==0) {
+            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
+                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
+
+        } else {
+            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
+                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
+        }
         //moviesViewHolder.imageViewPoster.setImageBitmap(getImage(movie.posterUrl))
     }
 

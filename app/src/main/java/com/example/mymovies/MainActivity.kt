@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -17,9 +18,11 @@ import com.example.mymovies.utils.NetworkUtils
 
 class MainActivity : AppCompatActivity() {
     var loaderProgress: ProgressBar? = null
+    lateinit var menu: Menu
     var imageViewPoster: ImageView? = null
     companion object {
-
+        @JvmStatic var ISDOWNLOADED = 0
+        val favouriteMovies = ArrayList<Movie>()
         var movies = ArrayList<Movie>()
     }
     private var adapter: MoviesAdapter? = null
@@ -66,6 +69,14 @@ class MainActivity : AppCompatActivity() {
         val inflater = menuInflater
         inflater.inflate(R.menu.menu_movies, menu)
         return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId==R.id.action_favourites) {
+            val intent = Intent(this, FavouriteActivity::class.java)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
