@@ -19,19 +19,28 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
+
             <ProgressBar
                 android:id="@+id/progress"
                 style="@android:style/Widget.Holo.Light.ProgressBar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_gravity="center"/>
+                android:layout_gravity="center" />
             <ImageView
                 android:id="@+id/imageViewPoster"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:adjustViewBounds="true"
                 android:scaleType="fitXY"
-                app:srcCompat="@drawable/image_detail" />
+                app:srcCompat="@drawable/image_detail"
+                android:contentDescription="TODO" />
+
+            <ImageView
+                android:id="@+id/imageViewFavourites"
+                android:layout_width="49dp"
+                android:layout_height="62dp"
+                android:layout_gravity="end"
+                app:srcCompat="@drawable/starempty" />
 
             <TextView
                 android:id="@+id/textViewTitle"

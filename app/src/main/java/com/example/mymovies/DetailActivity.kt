@@ -3,6 +3,7 @@ package com.example.mymovies
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -41,6 +42,7 @@ class DetailActivity : AppCompatActivity(), Callback {
 
         Picasso.get().load(movie.posterLargeUrl).placeholder(R.drawable.image_detail).error(R.drawable.image_detail).into(binding.imageViewPoster, this)
     }
+
 
     override fun onSuccess() {
         loaderView.visibility = View.GONE

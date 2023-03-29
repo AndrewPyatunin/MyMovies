@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
 import android.view.View
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loaderProgress = binding.progressBar
-       // loaderProgress?.visibility = View.VISIBLE
+        loaderProgress?.visibility = View.VISIBLE
 //        imageViewPoster = findViewById(R.id.imageMovie)
         //val url = NetworkUtils.buildURL(true, 2)
 
@@ -59,6 +60,12 @@ class MainActivity : AppCompatActivity() {
         }
 //        Log.i("LIST", list.map { it.toString() }.toString())
         //Log.i("JSONObject", (jsonObject)?.getJSONArray("items")?.getJSONObject(0)?.getString("nameRu").toString())
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_movies, menu)
+        return super.onCreateOptionsMenu(menu)
     }
 
 

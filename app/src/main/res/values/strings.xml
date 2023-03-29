@@ -5,4 +5,5 @@
     <string name="movie">Фильм:</string>
     <string name="textViewRating">Рейтинг по версии кинопоиск: %1$.1f</string>
     <string name="textViewGenres">Жанры: %1$s</string>
+    <string name="favourites">Избранное</string>
 </resources>
