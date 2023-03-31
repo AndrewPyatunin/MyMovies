@@ -61,14 +61,14 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     override fun onBindViewHolder(moviesViewHolder: MoviesViewHolder, position: Int) {
         val movie = movies[position]
-        if (MainActivity.ISDOWNLOADED==0) {
-            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
-                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
+//        if (MainActivity.ISDOWNLOADED==0) {
+        Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
+            .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
 
-        } else {
-            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
-                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
-        }
+//        } else {
+//            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
+//                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
+//        }
         //moviesViewHolder.imageViewPoster.setImageBitmap(getImage(movie.posterUrl))
     }
 

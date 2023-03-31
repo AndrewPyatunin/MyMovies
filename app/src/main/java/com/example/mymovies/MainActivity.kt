@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val favouriteMovies = ArrayList<Movie>()
         var movies = ArrayList<Movie>()
     }
-    private var adapter: MoviesAdapter? = null
+    private lateinit var adapter: MoviesAdapter
     lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,12 +51,12 @@ class MainActivity : AppCompatActivity() {
         NetworkUtils.getJSONFromNetwork(true, 1) {
 
             Log.i("LOG", Thread.currentThread().name)
-            adapter?.movies = it
+            adapter.movies = it
             loaderProgress?.visibility = View.GONE
             //adapter?.notifyDataSetChanged()
         }
-        movies = adapter?.movies as ArrayList<Movie>
-        adapter?.onItemClick = {
+        movies = adapter.movies
+        adapter.onItemClick = {
             val intent = Intent(this, DetailActivity::class.java)
             intent.putExtra("position", movies.indexOf(it))
             startActivity(intent)

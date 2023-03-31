@@ -18,7 +18,7 @@ class FavouriteActivity : AppCompatActivity() {
             recyclerViewFavourites.layoutManager = GridLayoutManager(applicationContext, 2)
             recyclerViewFavourites.isNestedScrollingEnabled = true
         }
-        MainActivity.ISDOWNLOADED++
+//        MainActivity.ISDOWNLOADED++
         adapter = MoviesAdapter()
         adapter.movies = MainActivity.favouriteMovies
         binding.recyclerViewFavourites.adapter = adapter

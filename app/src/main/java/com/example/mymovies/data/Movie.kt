@@ -15,8 +15,9 @@ class Movie() {
     @ColumnInfo var type: String = ""
     @ColumnInfo var posterUrl = ""
     @ColumnInfo var posterLargeUrl = ""
+    @ColumnInfo var isFavourite = false
     @ColumnInfo lateinit var genres: List<String>
-    constructor(id: Int, title: String, originalTitle: String, rating: Double, realiseDate: Int, type: String, posterUrl: String, posterLargeUrl: String, genres: List<String>) : this() {
+    constructor(id: Int, title: String, originalTitle: String, rating: Double, realiseDate: Int, type: String, posterUrl: String, posterLargeUrl: String, genres: List<String>, isFavourite: Boolean = false) : this() {
         this.id = id
         this.title = title
         this.originalTitle = originalTitle
@@ -26,6 +27,7 @@ class Movie() {
         this.posterUrl = posterUrl
         this.posterLargeUrl = posterLargeUrl
         this.genres = genres
+        this.isFavourite = isFavourite
     }
 
     override fun toString(): String {

@@ -7,6 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -28,10 +29,11 @@ class DetailActivity : AppCompatActivity(), Callback {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater).also { setContentView(it.root) }
         loaderView = findViewById(R.id.progress)
-
+        binding.imageViewFavourites.setImageResource(R.drawable.starempty)
         val position = intent.extras?.getInt("position")
         val movie = if(position!=null) movies[position] else throw Exception("Ошибка передачи позиции!")
         val type = if(movie.type == FILM) getString(R.string.movie) else getString(R.string.tv_series)
+        if (movie.isFavourite) binding.imageViewFavourites.setImageResource(R.drawable.favourite)
 
         with(binding) {
             textViewTitle.text = String.format(
@@ -45,8 +47,16 @@ class DetailActivity : AppCompatActivity(), Callback {
             textViewGenres.text =
                 String.format(getString(R.string.textViewGenres), movie.genres.joinToString())
             imageViewFavourites.setOnClickListener {
-                (it as ImageView).setImageResource(R.drawable.favourite)
-                favouriteMovies.add(movie)
+                if(!movie.isFavourite) {
+                    (it as ImageView).setImageResource(R.drawable.favourite)
+
+                    movie.isFavourite = true
+                    favouriteMovies.add(movie)
+                } else {
+                    (it as ImageView).setImageResource(R.drawable.starempty)
+                    movie.isFavourite = false
+                    favouriteMovies.remove(movie)
+                }
                 Log.i("FAVOURITE", favouriteMovies.toString())
             }
         }
@@ -63,6 +73,20 @@ class DetailActivity : AppCompatActivity(), Callback {
     override fun onError(e: java.lang.Exception?) {
         loaderView.visibility = View.GONE
         binding.imageViewPoster.visibility = View.VISIBLE
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.menu_movies, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId==R.id.action_favourites) {
+            val intent = Intent(this, FavouriteActivity::class.java)
+            startActivity(intent)
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
