@@ -4,6 +4,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ProgressBar
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.RecyclerView
+import com.example.mymovies.MainActivity.Companion.favouriteMovies
 import com.example.mymovies.databinding.ActivityFavouriteBinding
 
 class FavouriteActivity : AppCompatActivity() {
@@ -20,8 +23,33 @@ class FavouriteActivity : AppCompatActivity() {
         }
 //        MainActivity.ISDOWNLOADED++
         adapter = MoviesAdapter()
-        adapter.movies = MainActivity.favouriteMovies
+        adapter.movies = favouriteMovies
         binding.recyclerViewFavourites.adapter = adapter
+        adapter.onLongMovieClick = {
+            it.isFavourite = false
+            adapter.movies.remove(it)
+        }
+
+        val itemTouch =
+            ItemTouchHelper(object :
+                ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT or ItemTouchHelper.LEFT) {
+                override fun onMove(
+                    recyclerView: RecyclerView,
+                    viewHolder: RecyclerView.ViewHolder,
+                    target: RecyclerView.ViewHolder
+                ): Boolean {
+                    TODO("Not yet implemented")
+                }
+
+                override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                    val position = viewHolder.adapterPosition
+                    adapter.movies[position].isFavourite = false
+                    adapter.movies.removeAt(position)
+                    adapter.notifyItemRemoved(position)
+                }
+
+            })
+        itemTouch.attachToRecyclerView(binding.recyclerViewFavourites)
     }
 
 }

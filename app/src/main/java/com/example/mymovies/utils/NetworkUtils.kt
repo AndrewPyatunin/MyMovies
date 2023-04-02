@@ -33,7 +33,9 @@ class NetworkUtils {
         val PAGE = "page"
         val FILM = "FILM"
         val TV = "TV_SERIES"
-        @Volatile var type = ""
+
+        @Volatile
+        var type = ""
         fun buildURL(typeFilm: Boolean, page: Int): URL {
             type = if (typeFilm) FILM else TV
             val uri: Uri = Uri.parse(BASE_URL).buildUpon()
@@ -47,54 +49,53 @@ class NetworkUtils {
 //                res = result.openConnection() as HttpURLConnection
 //                res.setRequestProperty("accept", "application/json")
 //                res.setRequestProperty("X-API-KEY", "")
-            } catch(e: MalformedURLException) {
+            } catch (e: MalformedURLException) {
                 e.printStackTrace()
             }
             return result
         }
-        fun getJSONFromNetwork(typeFilm: Boolean, page: Int, onSuccess: (ArrayList<Movie>) -> Unit): JSONObject? {
-            var jsonObject: JSONObject ?= null
+
+        fun getJSONFromNetwork(
+            typeFilm: Boolean,
+            page: Int,
+            onSuccess: (ArrayList<Movie>) -> Unit
+        ) {
             try {
-                jsonObject = doInBackground(buildURL(typeFilm, page), onSuccess=onSuccess)
+                doInBackground(buildURL(typeFilm, page), onSuccess = onSuccess)
             } catch (ex: Exception) {
                 ex.printStackTrace()
             }
-            return jsonObject
         }
 
-        fun doInBackground(vararg urls: URL, onSuccess: ( ArrayList<Movie>) -> Unit): JSONObject {
+        fun doInBackground(vararg urls: URL, onSuccess: (ArrayList<Movie>) -> Unit) {
 
-            val future = executor.submit (object : Callable<JSONObject> {
-                var result1: JSONObject ?= null
-                override fun call(): JSONObject {
-                    var connection: HttpURLConnection? = null
-                    try {
-                        Log.i("Thread", Thread.currentThread().name)
-                        connection = urls[0].openConnection() as HttpURLConnection
-                        connection.setRequestProperty("X-API-KEY", API_KEY)
-                        connection.setRequestProperty("accept", "application/json")
-                        var inputStream = connection.inputStream
-                        val reader = BufferedReader(InputStreamReader(inputStream))
-                        var builder = StringBuilder()
-                        var line = reader.readLine()
-                        while (line != null) {
-                            builder.append(line)
-                            line = reader.readLine()
-                        }
-                        val result = JSONUtils.getMoviesFromJSON(JSONObject(builder.toString()))
-                        onSuccess(result)
-                        //doSomethingOnUi(result1)
-
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        connection?.disconnect()
+            executor.submit {
+                var result1: JSONObject? = null
+                var connection: HttpURLConnection? = null
+                try {
+                    Log.i("RESULT_", Thread.currentThread().name)
+                    connection = urls[0].openConnection() as HttpURLConnection
+                    connection.setRequestProperty("X-API-KEY", API_KEY)
+                    connection.setRequestProperty("accept", "application/json")
+                    var inputStream = connection.inputStream
+                    val reader = BufferedReader(InputStreamReader(inputStream))
+                    var builder = StringBuilder()
+                    var line = reader.readLine()
+                    while (line != null) {
+                        builder.append(line)
+                        line = reader.readLine()
                     }
-                    return result1 as JSONObject
+                    val result = JSONUtils.getMoviesFromJSON(JSONObject(builder.toString()))
+                    onSuccess(result)
+                    //doSomethingOnUi(result1)
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                } finally {
+                    connection?.disconnect()
                 }
-            })
-            return future.get()
-                //if (urls == null || urls.isEmpty()) result1
+            }
+            //if (urls == null || urls.isEmpty()) result1
 
 
             //return result as JSONObject

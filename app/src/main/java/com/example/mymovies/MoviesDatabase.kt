@@ -13,7 +13,7 @@ abstract class MoviesDatabase: RoomDatabase() {
 
     companion object {
         var database: MoviesDatabase? = null
-        private const val DB_NAME = "moviesNew.db"
+        private const val DB_NAME = "moviesFavourite.db"
         private val LOCK = Any()
         fun getInstance(context: Context): MoviesDatabase {
             synchronized(LOCK) {

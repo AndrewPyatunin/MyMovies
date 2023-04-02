@@ -12,7 +12,7 @@ import com.squareup.picasso.Picasso
 class MoviesDiffCallback(
     private val oldList: List<Movie>,
     private val newList: List<Movie>
-): DiffUtil.Callback() {
+) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
@@ -34,21 +34,30 @@ class MoviesDiffCallback(
 class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     var onItemClick: ((Movie) -> Unit)? = null
-//    val executor = Executors.newSingleThreadExecutor()
+    var onLongMovieClick: ((Movie) -> Unit)? = null
+
+    //    val executor = Executors.newSingleThreadExecutor()
 //    var loaderProgress: ProgressBar? = null
     var movies: ArrayList<Movie> = ArrayList()
-    set(newValue) {
-        val diffCallBack = MoviesDiffCallback(field, newValue)
-        val diffResult = DiffUtil.calculateDiff(diffCallBack)
-        field = newValue
-        diffResult.dispatchUpdatesTo(this)
-    }
+        set(newValue) {
+            val diffCallBack = MoviesDiffCallback(field, newValue)
+            val diffResult = DiffUtil.calculateDiff(diffCallBack)
+            diffResult.dispatchUpdatesTo(this)
+            field = newValue
+        }
 
-    inner class MoviesViewHolder(itemView: View, val imageViewPoster: ImageView = itemView.findViewById(R.id.imageMovie)):RecyclerView.ViewHolder(itemView) {
+    inner class MoviesViewHolder(
+        itemView: View,
+        val imageViewPoster: ImageView = itemView.findViewById(R.id.imageMovie)
+    ) : RecyclerView.ViewHolder(itemView) {
 
         init {
             itemView.setOnClickListener {
                 onItemClick?.invoke(movies[adapterPosition])
+            }
+            itemView.setOnLongClickListener {
+                onLongMovieClick?.invoke(movies[adapterPosition])
+                true
             }
         }
     }

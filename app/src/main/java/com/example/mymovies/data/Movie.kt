@@ -1,12 +1,13 @@
 package com.example.mymovies.data
 
+import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity(tableName = "movies")
-class Movie() {
+class Movie(): java.io.Serializable {
     @PrimaryKey var id: Int = 0
     @ColumnInfo var title = ""
     @ColumnInfo var originalTitle = ""

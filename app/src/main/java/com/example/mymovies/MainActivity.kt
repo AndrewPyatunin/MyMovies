@@ -3,6 +3,8 @@ package com.example.mymovies
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -20,11 +22,14 @@ class MainActivity : AppCompatActivity() {
     var loaderProgress: ProgressBar? = null
     lateinit var menu: Menu
     var imageViewPoster: ImageView? = null
+
     companion object {
-        @JvmStatic var ISDOWNLOADED = 0
+        @JvmStatic
+        var ISDOWNLOADED = 0
         val favouriteMovies = ArrayList<Movie>()
         var movies = ArrayList<Movie>()
     }
+
     private lateinit var adapter: MoviesAdapter
     lateinit var binding: ActivityMainBinding
 
@@ -50,15 +55,15 @@ class MainActivity : AppCompatActivity() {
 
         NetworkUtils.getJSONFromNetwork(true, 1) {
 
-            Log.i("LOG", Thread.currentThread().name)
-            adapter.movies = it
-            loaderProgress?.visibility = View.GONE
-            //adapter?.notifyDataSetChanged()
+            Handler(Looper.getMainLooper()).post {
+                Log.i("HELLOWORLD", Thread.currentThread().name)
+                adapter.movies = it
+                loaderProgress?.visibility = View.GONE
+            }
         }
-        movies = adapter.movies
         adapter.onItemClick = {
             val intent = Intent(this, DetailActivity::class.java)
-            intent.putExtra("position", movies.indexOf(it))
+            intent.putExtra("movie", it)
             startActivity(intent)
         }
 //        Log.i("LIST", list.map { it.toString() }.toString())
@@ -72,16 +77,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if(item.itemId==R.id.action_favourites) {
+        if (item.itemId == R.id.action_favourites) {
             val intent = Intent(this, FavouriteActivity::class.java)
             startActivity(intent)
         }
         return super.onOptionsItemSelected(item)
     }
 
-
-//    fun openFilmDetails() {
-//        val intent = Intent(this, DetailActivity::class.java)
-//        startActivity(intent)
-//    }
 }
