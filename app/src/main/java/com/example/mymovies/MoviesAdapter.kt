@@ -35,10 +35,7 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     var onItemClick: ((Movie) -> Unit)? = null
     var onLongMovieClick: ((Movie) -> Unit)? = null
-
-    //    val executor = Executors.newSingleThreadExecutor()
-//    var loaderProgress: ProgressBar? = null
-    var movies: ArrayList<Movie> = ArrayList()
+    var movies: List<Movie> = ArrayList()
         set(newValue) {
             val diffCallBack = MoviesDiffCallback(field, newValue)
             val diffResult = DiffUtil.calculateDiff(diffCallBack)
@@ -70,45 +67,15 @@ class MoviesAdapter : RecyclerView.Adapter<MoviesAdapter.MoviesViewHolder>() {
 
     override fun onBindViewHolder(moviesViewHolder: MoviesViewHolder, position: Int) {
         val movie = movies[position]
-//        if (MainActivity.ISDOWNLOADED==0) {
         Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
             .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
 
-//        } else {
-//            Picasso.get().load(movie.posterUrl).placeholder(R.drawable.my_image)
-//                .error(R.drawable.my_image).into(moviesViewHolder.imageViewPoster)
-//        }
-        //moviesViewHolder.imageViewPoster.setImageBitmap(getImage(movie.posterUrl))
     }
 
     override fun getItemCount(): Int {
         return movies.size
     }
 
-//    fun getImage(vararg urls: String): Bitmap {
-//        val future = executor.submit(object: Callable<Bitmap>{
-//            override fun call(): Bitmap {
-//                var bitmap: Bitmap ?= null
-//                var connection: HttpURLConnection ?= null
-//                try {
-//                    var url = URL(urls[0])
-//                    connection = url.openConnection() as HttpURLConnection
-//                    var inputStream = connection.inputStream
-//                    bitmap = BitmapFactory.decodeStream(inputStream)
-//
-//                } catch (e: Exception) {
-//                    e.printStackTrace()
-//                } finally {
-//                    connection?.disconnect()
-//                }
-//                if(bitmap!=null) {
-//                    return bitmap
-//                } else throw Exception("Not found image!")
-//            }
-//
-//        })
-//        return future.get()
-//    }
 
 
 }

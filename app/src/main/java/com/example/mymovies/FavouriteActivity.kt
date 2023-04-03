@@ -2,32 +2,33 @@ package com.example.mymovies
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ProgressBar
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
-import com.example.mymovies.MainActivity.Companion.favouriteMovies
+import com.example.mymovies.data.Movie
 import com.example.mymovies.databinding.ActivityFavouriteBinding
 
 class FavouriteActivity : AppCompatActivity() {
     lateinit var binding: ActivityFavouriteBinding
     private lateinit var adapter: MoviesAdapter
-    lateinit var progress: ProgressBar
+    lateinit var viewModel: FavouriteViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityFavouriteBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        viewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
         with(binding) {
             recyclerViewFavourites.layoutManager = GridLayoutManager(applicationContext, 2)
             recyclerViewFavourites.isNestedScrollingEnabled = true
         }
-//        MainActivity.ISDOWNLOADED++
         adapter = MoviesAdapter()
-        adapter.movies = favouriteMovies
+        getData()
         binding.recyclerViewFavourites.adapter = adapter
         adapter.onLongMovieClick = {
             it.isFavourite = false
-            adapter.movies.remove(it)
+            (adapter.movies as ArrayList<Movie>).remove(it)
         }
 
         val itemTouch =
@@ -44,12 +45,25 @@ class FavouriteActivity : AppCompatActivity() {
                 override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                     val position = viewHolder.adapterPosition
                     adapter.movies[position].isFavourite = false
-                    adapter.movies.removeAt(position)
-                    adapter.notifyItemRemoved(position)
+                    remove(position)
                 }
 
             })
         itemTouch.attachToRecyclerView(binding.recyclerViewFavourites)
     }
 
+    fun remove(position: Int) {
+        val movie = adapter.movies[position]
+        viewModel.deleteMovie(movie)
+    }
+
+    fun getData() {
+        val moviesFromDb = viewModel.moviesFav
+        moviesFromDb.observe(this, object: Observer<List<Movie>> {
+            override fun onChanged(value: List<Movie>) {
+                adapter.movies = value
+            }
+
+        })
+    }
 }

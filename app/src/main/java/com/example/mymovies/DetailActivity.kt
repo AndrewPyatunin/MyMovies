@@ -3,13 +3,12 @@ package com.example.mymovies
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
-import com.example.mymovies.MainActivity.Companion.favouriteMovies
-import com.example.mymovies.MainActivity.Companion.movies
+import androidx.lifecycle.ViewModelProvider
+import com.example.mymovies.MainActivity.Companion.beginMovies
 import com.example.mymovies.data.Movie
 import com.example.mymovies.databinding.ActivityDetailBinding
 import com.example.mymovies.utils.NetworkUtils.Companion.FILM
@@ -20,15 +19,19 @@ class DetailActivity : AppCompatActivity(), Callback {
 
     lateinit var loaderView: View
     lateinit var binding: ActivityDetailBinding
+    lateinit var viewModel: FavouriteViewModel
+    lateinit var database: MoviesDatabase
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailBinding.inflate(layoutInflater).also { setContentView(it.root) }
+        viewModel = ViewModelProvider(this)[FavouriteViewModel::class.java]
+        database = MoviesDatabase.getInstance(this)
         loaderView = findViewById(R.id.progress)
-        binding.imageViewFavourites.setImageResource(R.drawable.starempty)
-        val movie = intent.extras?.getSerializable("movie") as Movie
-//        val movie =
-//            if (position != null) movies[position] else throw Exception("Ошибка передачи позиции!")
+        if (binding.textViewTitle.text == "") binding.imageViewFavourites.setImageResource(R.drawable.starempty)
+
+        val movieFromMain = intent.extras?.getSerializable("movie") as Movie
+        val movie = beginMovies[beginMovies.indexOf(movieFromMain)]
         val type =
             if (movie.type == FILM) getString(R.string.movie) else getString(R.string.tv_series)
         if (movie.isFavourite) binding.imageViewFavourites.setImageResource(R.drawable.favourite)
@@ -47,15 +50,13 @@ class DetailActivity : AppCompatActivity(), Callback {
             imageViewFavourites.setOnClickListener {
                 if (!movie.isFavourite) {
                     (it as ImageView).setImageResource(R.drawable.favourite)
-
                     movie.isFavourite = true
-                    favouriteMovies.add(movie)
+                    viewModel.insertMovie(movie)
                 } else {
                     (it as ImageView).setImageResource(R.drawable.starempty)
                     movie.isFavourite = false
-                    favouriteMovies.remove(movie)
+                    viewModel.deleteMovie(movie)
                 }
-                Log.i("FAVOURITE", favouriteMovies.toString())
             }
         }
 

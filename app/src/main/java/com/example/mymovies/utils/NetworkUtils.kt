@@ -1,9 +1,6 @@
 package com.example.mymovies.utils
 
 import android.net.Uri
-import android.os.AsyncTask
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
 import com.example.mymovies.data.Movie
 import org.json.JSONObject
@@ -12,7 +9,6 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.concurrent.Callable
 import java.util.concurrent.Executors
 
 class NetworkUtils {
@@ -46,9 +42,6 @@ class NetworkUtils {
                 .build()
             try {
                 result = URL(uri.toString())
-//                res = result.openConnection() as HttpURLConnection
-//                res.setRequestProperty("accept", "application/json")
-//                res.setRequestProperty("X-API-KEY", "")
             } catch (e: MalformedURLException) {
                 e.printStackTrace()
             }
@@ -70,7 +63,6 @@ class NetworkUtils {
         fun doInBackground(vararg urls: URL, onSuccess: (ArrayList<Movie>) -> Unit) {
 
             executor.submit {
-                var result1: JSONObject? = null
                 var connection: HttpURLConnection? = null
                 try {
                     Log.i("RESULT_", Thread.currentThread().name)
@@ -87,7 +79,6 @@ class NetworkUtils {
                     }
                     val result = JSONUtils.getMoviesFromJSON(JSONObject(builder.toString()))
                     onSuccess(result)
-                    //doSomethingOnUi(result1)
 
                 } catch (e: Exception) {
                     e.printStackTrace()
@@ -95,18 +86,7 @@ class NetworkUtils {
                     connection?.disconnect()
                 }
             }
-            //if (urls == null || urls.isEmpty()) result1
-
-
-            //return result as JSONObject
         }
-
-//        fun doSomethingOnUi(jsonObject: JSONObject?) {
-//            Handler(Looper.getMainLooper()).post {
-//                executor.shutdown()
-//                //Log.i("JSON", (jsonObject)?.getJSONArray("results")?.getJSONObject(0)?.getString("title").toString())
-//            }
-//        }
     }
 
 
